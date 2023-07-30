@@ -38,7 +38,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User{
 
 	@Override
 	public String getPassword() {
-		return user.getPassword();
+		return "비밀번호";
 	}
 
 	@Override

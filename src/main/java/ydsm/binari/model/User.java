@@ -26,7 +26,6 @@ public class User {
 	private int id;
 	private String username;
 	private String nickname;
-	private String password;
 	private String email;
 	//private String role; //ROLE_USER, ROLE_ADMIN
 	// OAuth를 위해 구성한 추가 필드 2개
