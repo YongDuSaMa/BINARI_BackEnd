@@ -20,12 +20,11 @@ public class SecurityConfig {
 				.anyRequest().permitAll()
 				.and()
 				.formLogin()
-				.loginPage("/login")
+				.loginPage("/loginForm")
 				.loginProcessingUrl("/loginProc")
 				.defaultSuccessUrl("/")
 				.and()
 				.oauth2Login()
-				.loginPage("/login")
 				.userInfoEndpoint()
 				.userService(principalOauth2UserService);
 

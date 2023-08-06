@@ -13,7 +13,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// ORM - Object Relation Mapping
 
 @Builder
 @Data

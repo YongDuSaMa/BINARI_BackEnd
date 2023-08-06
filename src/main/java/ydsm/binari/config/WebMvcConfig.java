@@ -1,3 +1,4 @@
+
 package ydsm.binari.config;
 
 import org.springframework.boot.web.servlet.view.MustacheViewResolver;
@@ -14,9 +15,10 @@ public class WebMvcConfig implements WebMvcConfigurer{
 
       resolver.setCharset("UTF-8");
       resolver.setContentType("text/html;charset=UTF-8");
-      resolver.setPrefix("classpath:/templates/");
-      resolver.setSuffix(".html");
+      resolver.setPrefix("classpath:/WEB-INF/views/");
+      resolver.setSuffix(".jsp");
 
       registry.viewResolver(resolver);
   }
 }
+
