@@ -1,8 +1,6 @@
 package ydsm.binari.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ydsm.binari.config.auth.PrincipalDetails;
@@ -31,8 +29,7 @@ public class BoardService {
     @Transactional
     public void writeBoardService(Board board, User user) {
         board.setUser(user);
-        //board.setBoardType(board.getBoardType());
-        board.setBoardType(BoardType.QnA);
+        board.setBoardType(board.getBoardType());
         boardRepository.save(board);
     }
 

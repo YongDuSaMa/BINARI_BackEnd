@@ -10,12 +10,12 @@ import ydsm.binari.service.BoardService;
 @Controller
 public class IndexController {
 
-/*
-	@GetMapping({"/",""})
+
+/*	@GetMapping({"/",""})
 	public String index(){
 		return "index";
-	}
-*/
+	}*/
+
 
 	@Autowired
 	BoardService boardService;
