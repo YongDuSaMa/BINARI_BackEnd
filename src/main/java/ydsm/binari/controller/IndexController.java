@@ -1,9 +1,6 @@
 package ydsm.binari.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,33 +10,34 @@ import ydsm.binari.service.BoardService;
 @Controller
 public class IndexController {
 
-	/*@GetMapping({"/",""})
+/*
+	@GetMapping({"/",""})
 	public String index(){
 		return "index";
-	}*/
-
+	}
+*/
 
 	@Autowired
 	BoardService boardService;
 
-	/*@GetMapping("/loginForm")
+/*	@GetMapping("/loginForm")
 	public String login() {
 		return "/user/loginForm";
 	}*/
 
 	@GetMapping("/boardFormQnA")
-	public String boardQnA(Model model, @PageableDefault(size = 12,sort = "id",direction = Sort.Direction.DESC) Pageable pageable){
-		model.addAttribute("boards",boardService.boardListService(pageable));
+	public String boardQnA(Model model){
+		model.addAttribute("boards",boardService.boardListQnAService());
 		return "/board/boardFormQnA";
 	}
 
 	@GetMapping("/boardFormInform")
-	public String boardInform(Model model, @PageableDefault(size = 12,sort = "id",direction = Sort.Direction.DESC) Pageable pageable){
-		model.addAttribute("boards",boardService.boardListService(pageable));
+	public String boardInform(Model model){
+		model.addAttribute("boards",boardService.boardListInformService());
 		return "/board/boardFormInform";
 	}
 
-	/*@GetMapping("/board/saveForm")
+/*	@GetMapping("/board/saveForm")
 	public String saveForm(){
 		return "board/saveForm";
 	}*/

@@ -9,6 +9,8 @@ import ydsm.binari.config.auth.PrincipalDetails;
 import ydsm.binari.model.*;
 import ydsm.binari.repository.*;
 
+import java.util.List;
+
 
 @Service
 public class BoardService {
@@ -29,13 +31,19 @@ public class BoardService {
     @Transactional
     public void writeBoardService(Board board, User user) {
         board.setUser(user);
-        board.setBoardType(board.getBoardType());
+        //board.setBoardType(board.getBoardType());
+        board.setBoardType(BoardType.QnA);
         boardRepository.save(board);
     }
 
     @Transactional(readOnly = true)
-    public Page<Board> boardListService(Pageable pageable) {
-        return boardRepository.findAll(pageable);
+    public List<Board> boardListQnAService() {
+        return boardRepository.findByBoardType(BoardType.QnA);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Board> boardListInformService() {
+        return boardRepository.findByBoardType(BoardType.information);
     }
 
     @Transactional(readOnly = true)
