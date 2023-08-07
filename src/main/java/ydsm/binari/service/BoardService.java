@@ -29,6 +29,7 @@ public class BoardService {
     @Transactional
     public void writeBoardService(Board board, User user) {
         board.setUser(user);
+        board.setBoardType(board.getBoardType());
         boardRepository.save(board);
     }
 
