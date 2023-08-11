@@ -101,7 +101,12 @@ public class BoardService {
 
     @Transactional
     public void replyDeleteService(int id){
+        Reply reply = replyRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
+                });
         replyRepository.deleteById(id);
+        likesReplyRepository.deleteByReply(reply);
     }
 
     @Transactional
@@ -135,9 +140,9 @@ public class BoardService {
                 .orElseThrow(() -> {
                     return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
                 });
-        System.out.println(findBoard.getLikeCount());
+        System.out.println(findBoard.getScrapCount());
         if(!scrapRepository.existsByUserAndBoard(user,findBoard)){
-            findBoard.setLikeCount(findBoard.getLikeCount() + 1);
+            findBoard.setScrapCount(findBoard.getScrapCount() + 1);
             Scrap scrap= Scrap.builder()
                     .user(user)
                     .board(findBoard)
@@ -145,10 +150,10 @@ public class BoardService {
             scrapRepository.save(scrap);
         }
         else{
-            findBoard.setLikeCount(findBoard.getLikeCount() - 1);
+            findBoard.setScrapCount(findBoard.getScrapCount() - 1);
             scrapRepository.deleteByUserAndBoard(user,findBoard);
         }
-        System.out.println(findBoard.getLikeCount());
+        System.out.println(findBoard.getScrapCount());
         boardRepository.save(findBoard);
     }
 
@@ -173,5 +178,14 @@ public class BoardService {
             likesReplyRepository.deleteByUserAndReply(user,findReply);
         }
         replyRepository.save(findReply);
+    }
+
+    @Transactional
+    public void replyUpdateService(int id,Reply after) {
+        Reply before = replyRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
+                });
+        before.setContent(after.getContent());
     }
 }

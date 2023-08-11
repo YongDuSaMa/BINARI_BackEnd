@@ -72,4 +72,11 @@ public class BoardApiController {
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
+    //댓글 수정
+    @PutMapping(value = "/api/board/{replyId}/reply")
+    public ResponseDto<Integer> update(@PathVariable int replyId,@RequestBody Reply reply){
+        boardService.replyUpdateService(replyId,reply);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
 }

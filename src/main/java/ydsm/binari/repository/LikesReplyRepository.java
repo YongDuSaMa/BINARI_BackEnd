@@ -9,4 +9,5 @@ public interface LikesReplyRepository extends JpaRepository<LikesReply,Integer> 
 
     boolean existsByUserAndReply(User user, Reply reply);
     void deleteByUserAndReply(User user,Reply reply);
+    void deleteByReply(Reply reply);
 }

@@ -10,15 +10,14 @@ import ydsm.binari.service.BoardService;
 @Controller
 public class IndexController {
 
-
-/*	@GetMapping({"/",""})
-	public String index(){
-		return "index";
-	}*/
-
-
 	@Autowired
 	BoardService boardService;
+
+	@GetMapping({"/",""})
+	public String index(Model model){
+		model.addAttribute("boards",boardService.boardListQnAService());
+		return "index";
+	}
 
 /*	@GetMapping("/loginForm")
 	public String login() {
