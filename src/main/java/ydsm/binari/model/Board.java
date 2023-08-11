@@ -44,6 +44,7 @@ public class Board {
 
     private Integer viewCount=0; //조회수
     private Integer likeCount=0; //글 추천수
+    private Integer scrapCount=0;
 
 
 }

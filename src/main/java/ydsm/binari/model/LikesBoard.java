@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Likes {
+public class LikesBoard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

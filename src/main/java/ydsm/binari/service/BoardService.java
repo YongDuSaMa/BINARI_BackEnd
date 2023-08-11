@@ -17,7 +17,10 @@ public class BoardService {
     BoardRepository boardRepository;
 
     @Autowired
-    LikesRepository likesRepository;
+    LikesBoardRepository likesBoardRepository;
+
+    @Autowired
+    LikesReplyRepository likesReplyRepository;
 
     @Autowired
     ScrapRepository scrapRepository;
@@ -29,7 +32,8 @@ public class BoardService {
     @Transactional
     public void writeBoardService(Board board, User user) {
         board.setUser(user);
-        board.setBoardType(board.getBoardType());
+        //board.setBoardType(board.getBoardType());
+        board.setBoardType(BoardType.QnA);
         boardRepository.save(board);
     }
 
@@ -77,7 +81,7 @@ public class BoardService {
                     return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
                 });
         boardRepository.deleteById(id);
-        likesRepository.deleteByBoard(board);
+        likesBoardRepository.deleteByBoard(board);
         scrapRepository.deleteByBoard(board);
     }
 
@@ -108,17 +112,17 @@ public class BoardService {
                     return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
                 });
         System.out.println(findBoard.getLikeCount());
-        if(!likesRepository.existsByUserAndBoard(user,findBoard)){
+        if(!likesBoardRepository.existsByUserAndBoard(user,findBoard)){
             findBoard.setLikeCount(findBoard.getLikeCount() + 1);
-            Likes likes=Likes.builder()
+            LikesBoard likes= LikesBoard.builder()
                     .user(user)
                     .board(findBoard)
                     .build();
-            likesRepository.save(likes);
+            likesBoardRepository.save(likes);
         }
         else{
             findBoard.setLikeCount(findBoard.getLikeCount() - 1);
-            likesRepository.deleteByUserAndBoard(user,findBoard);
+            likesBoardRepository.deleteByUserAndBoard(user,findBoard);
         }
         System.out.println(findBoard.getLikeCount());
         boardRepository.save(findBoard);
@@ -133,6 +137,7 @@ public class BoardService {
                 });
         System.out.println(findBoard.getLikeCount());
         if(!scrapRepository.existsByUserAndBoard(user,findBoard)){
+            findBoard.setLikeCount(findBoard.getLikeCount() + 1);
             Scrap scrap= Scrap.builder()
                     .user(user)
                     .board(findBoard)
@@ -140,8 +145,33 @@ public class BoardService {
             scrapRepository.save(scrap);
         }
         else{
+            findBoard.setLikeCount(findBoard.getLikeCount() - 1);
             scrapRepository.deleteByUserAndBoard(user,findBoard);
         }
         System.out.println(findBoard.getLikeCount());
+        boardRepository.save(findBoard);
+    }
+
+    @Transactional
+    public void likeReplyService(int replyId , User user) {
+
+        Reply findReply = replyRepository.findById(replyId)
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("reply 아이디를 찾을 수 없습니다.");
+                });
+
+        if(!likesReplyRepository.existsByUserAndReply(user,findReply)){
+            findReply.setLikeCount(findReply.getLikeCount() + 1);
+            LikesReply likes= LikesReply.builder()
+                    .user(user)
+                    .reply(findReply)
+                    .build();
+            likesReplyRepository.save(likes);
+        }
+        else{
+            findReply.setLikeCount(findReply.getLikeCount() - 1);
+            likesReplyRepository.deleteByUserAndReply(user,findReply);
+        }
+        replyRepository.save(findReply);
     }
 }

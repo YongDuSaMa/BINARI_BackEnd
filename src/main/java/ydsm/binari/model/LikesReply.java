@@ -14,31 +14,19 @@ import java.sql.Timestamp;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Reply {
-    @Id // primary key
+public class LikesReply {
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name="userId")
     private User user;
 
-    @Column(nullable = false,length = 200)
-    private String content;
-
     @ManyToOne
-    @JoinColumn(name = "boardId")
-    private Board board;
+    @JoinColumn(name = "replyId")
+    private Reply reply;
 
-    private int likeCount=0;
-
-  /*  @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "parent_id")
-    private Reply parent;
-
-    @OneToMany(mappedBy = "parent", orphanRemoval = true)
-    private List<Reply> children = new ArrayList<>();
-*/
     @CreationTimestamp
     private Timestamp createDate;
 }
