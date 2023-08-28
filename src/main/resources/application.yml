@@ -10,16 +10,23 @@ server:
 
 spring:
 
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/binari?serverTimezone=Asia/Seoul
+#    username: ydsm
+#    password: binari0915
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/binari?serverTimezone=Asia/Seoul
-    username: ydsm
-    password: binari0915
-    
-  mvc:
-    view:
-      prefix: /WEB-INF/views/ #/templates/
-      suffix: .jsp #.mustache
+    url: jdbc:mysql://15.164.25.36:3306/tigerdb?serverTimezone=Asia/Seoul
+    username: scott
+    password: tiger
+
+
+#  mvc:
+#    view:
+#      prefix: /WEB-INF/views/ #/templates/
+#      suffix: .jsp #.mustache
 
   jpa:
     hibernate:

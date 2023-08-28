@@ -1,3 +1,4 @@
+/*
 
 package ydsm.binari.config;
 
@@ -7,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebMvcConfig implements WebMvcConfigurer{  
+public class WebMvcConfig implements WebMvcConfigurer{
 
   @Override
   public void configureViewResolvers(ViewResolverRegistry registry) {
@@ -15,10 +16,11 @@ public class WebMvcConfig implements WebMvcConfigurer{
 
       resolver.setCharset("UTF-8");
       resolver.setContentType("text/html;charset=UTF-8");
-      resolver.setPrefix("classpath:/WEB-INF/views/");
-      resolver.setSuffix(".jsp");
+      resolver.setPrefix("classpath:/templates/");
+      resolver.setSuffix(".html");
 
       registry.viewResolver(resolver);
   }
 }
+*/
 

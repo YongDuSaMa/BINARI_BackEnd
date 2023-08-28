@@ -17,7 +17,7 @@ public class BoardApiController {
     @Autowired
     BoardService boardService;
 
-    //글 저장 (게시판)
+    //글 저장 (게시판, 투병일지 )
     @PostMapping(value = "/api/board")
     public ResponseDto<Integer> save(@RequestBody Board board, @AuthenticationPrincipal PrincipalDetails principalDetails){
         boardService.writeBoardService(board,principalDetails.getUser());
