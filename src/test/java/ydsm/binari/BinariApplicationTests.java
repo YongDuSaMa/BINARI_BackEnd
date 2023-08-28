@@ -1,10 +1,10 @@
-package ydsm.example.demo;
+package ydsm.binari;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class BinariApplicationTests {
 
 	@Test
 	void contextLoads() {
