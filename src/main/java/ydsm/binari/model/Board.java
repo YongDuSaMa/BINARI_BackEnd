@@ -33,7 +33,7 @@ public class Board {
 
     @OneToMany(mappedBy = "board",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("board")
-    @OrderBy("id desc")
+    @OrderBy("id asc")
     private List<Reply> replies;
 
     @Enumerated(EnumType.STRING)
@@ -41,6 +41,10 @@ public class Board {
 
     @CreationTimestamp
     private Timestamp createDate;
+
+    @ManyToOne
+    @JoinColumn(name = "hospitalDataId")
+    private HospitalData hospitalData;
 
     private Integer viewCount=0; //조회수
     private Integer likeCount=0; //글 추천수

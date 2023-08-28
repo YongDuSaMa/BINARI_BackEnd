@@ -28,10 +28,28 @@ public class BoardService {
     @Autowired
     ReplyRepository replyRepository;
 
+    @Autowired
+    HospitalDataRepository hospitalDataRepository;
+
+    @Autowired
+    ReReplyRepository reReplyRepository;
+
 
     @Transactional
     public void writeBoardService(Board board, User user) {
         board.setUser(user);
+        boardRepository.save(board);
+    }
+
+    @Transactional
+    public void writeHospitalBoardService(Board board, User user,int id) {
+        HospitalData hospitalData = hospitalDataRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
+                });
+        board.setUser(user);
+        board.setBoardType(BoardType.hospital);
+        board.setHospitalData(hospitalData);
         boardRepository.save(board);
     }
 
@@ -43,6 +61,16 @@ public class BoardService {
     @Transactional(readOnly = true)
     public List<Board> boardListInformService() {
         return boardRepository.findByBoardType(BoardType.information);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Board> boardListHospitalService() {
+        return boardRepository.findByBoardType(BoardType.hospital);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Board> boardListBlogService() {
+        return boardRepository.findByBoardType(BoardType.blog);
     }
 
     @Transactional(readOnly = true)
@@ -98,6 +126,20 @@ public class BoardService {
     }
 
     @Transactional
+    public void reReplyAddService(ReReply reReply, int id, PrincipalDetails principalDetails) {
+        Reply reply=replyRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
+                });
+        ReReply newReReply=ReReply.builder()
+                .user(principalDetails.getUser())
+                .reply(reply)
+                .content(reply.getContent())
+                .build();
+        reReplyRepository.save(newReReply);
+    }
+
+    @Transactional
     public void replyDeleteService(int id){
         Reply reply = replyRepository.findById(id)
                 .orElseThrow(() -> {
@@ -105,6 +147,80 @@ public class BoardService {
                 });
         replyRepository.deleteById(id);
         likesReplyRepository.deleteByReply(reply);
+    }
+
+    @Transactional
+    public void reReplyDeleteService(int id){
+        ReReply reReply = reReplyRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
+                });
+        reReplyRepository.deleteById(id);
+        likesReplyRepository.deleteByReReply(reReply);
+    }
+
+    @Transactional
+    public void likeReplyService(int replyId , User user) {
+
+        Reply findReply = replyRepository.findById(replyId)
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("reply 아이디를 찾을 수 없습니다.");
+                });
+
+        if(!likesReplyRepository.existsByUserAndReply(user,findReply)){
+            findReply.setLikeCount(findReply.getLikeCount() + 1);
+            LikesReply likes= LikesReply.builder()
+                    .user(user)
+                    .reply(findReply)
+                    .build();
+            likesReplyRepository.save(likes);
+        }
+        else{
+            findReply.setLikeCount(findReply.getLikeCount() - 1);
+            likesReplyRepository.deleteByUserAndReply(user,findReply);
+        }
+        replyRepository.save(findReply);
+    }
+
+    @Transactional
+    public void likeReReplyService(int reReplyId , User user) {
+
+        ReReply findReReply = reReplyRepository.findById(reReplyId)
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("reply 아이디를 찾을 수 없습니다.");
+                });
+
+        if(!likesReplyRepository.existsByUserAndReReply(user,findReReply)){
+            findReReply.setLikeCount(findReReply.getLikeCount() + 1);
+            LikesReply likes= LikesReply.builder()
+                    .user(user)
+                    .reReply(findReReply)
+                    .build();
+            likesReplyRepository.save(likes);
+        }
+        else{
+            findReReply.setLikeCount(findReReply.getLikeCount() - 1);
+            likesReplyRepository.deleteByUserAndReReply(user,findReReply);
+        }
+        reReplyRepository.save(findReReply);
+    }
+
+    @Transactional
+    public void replyUpdateService(int id,Reply after) {
+        Reply before = replyRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
+                });
+        before.setContent(after.getContent());
+    }
+
+    @Transactional
+    public void reReplyUpdateService(int id,ReReply after) {
+        ReReply before = reReplyRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
+                });
+        before.setContent(after.getContent());
     }
 
     @Transactional
@@ -155,35 +271,6 @@ public class BoardService {
         boardRepository.save(findBoard);
     }
 
-    @Transactional
-    public void likeReplyService(int replyId , User user) {
 
-        Reply findReply = replyRepository.findById(replyId)
-                .orElseThrow(() -> {
-                    return new IllegalArgumentException("reply 아이디를 찾을 수 없습니다.");
-                });
 
-        if(!likesReplyRepository.existsByUserAndReply(user,findReply)){
-            findReply.setLikeCount(findReply.getLikeCount() + 1);
-            LikesReply likes= LikesReply.builder()
-                    .user(user)
-                    .reply(findReply)
-                    .build();
-            likesReplyRepository.save(likes);
-        }
-        else{
-            findReply.setLikeCount(findReply.getLikeCount() - 1);
-            likesReplyRepository.deleteByUserAndReply(user,findReply);
-        }
-        replyRepository.save(findReply);
-    }
-
-    @Transactional
-    public void replyUpdateService(int id,Reply after) {
-        Reply before = replyRepository.findById(id)
-                .orElseThrow(() -> {
-                    return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
-                });
-        before.setContent(after.getContent());
-    }
 }

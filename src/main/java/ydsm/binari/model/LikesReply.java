@@ -27,6 +27,10 @@ public class LikesReply {
     @JoinColumn(name = "replyId")
     private Reply reply;
 
+    @ManyToOne
+    @JoinColumn(name = "reReplyId")
+    private ReReply reReply;
+
     @CreationTimestamp
     private Timestamp createDate;
 }
