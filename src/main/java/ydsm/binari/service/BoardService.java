@@ -7,6 +7,7 @@ import ydsm.binari.config.auth.PrincipalDetails;
 import ydsm.binari.model.*;
 import ydsm.binari.repository.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,6 +35,8 @@ public class BoardService {
     @Autowired
     ReReplyRepository reReplyRepository;
 
+    @Autowired
+    UserRepository userRepository;
 
     @Transactional
     public void writeBoardService(Board board, User user) {
@@ -79,6 +82,26 @@ public class BoardService {
                 .orElseThrow(() -> {
                     return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
                 });
+    }
+
+    @Transactional(readOnly = true)
+    public List<Board> boardAllService(int id) {
+        return boardRepository.findAll();
+    }
+
+    //해당유저의 스크랩 가져와서 글 뿌려주기
+    @Transactional
+    public List<Board> scrapDetailService(int id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("아이디를 찾을 수 없습니다.");
+                });
+        List<Board> boards=new ArrayList<>();
+        List<Scrap> scraps = scrapRepository.findByUser(user);
+        for(Scrap scrap:scraps){
+            boards.add(scrap.getBoard());
+        }
+        return boards;
     }
 
     @Transactional
